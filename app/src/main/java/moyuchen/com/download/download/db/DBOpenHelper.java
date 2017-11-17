@@ -14,12 +14,12 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL("CREATE TABLE IF NOT EXISTS filedownlog (id integer primary key autoincrement, downpath varchar(100), threadid INTEGER, downlength INTEGER)");
+		db.execSQL("CREATE TABLE IF NOT EXISTS FILE_RESULT (_id integer primary key autoincrement, DOWNPATH varchar(100), THREADID INTEGER, DOWNLENGTH INTEGER)");
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		db.execSQL("DROP TABLE IF EXISTS filedownlog");
+		db.execSQL("DROP TABLE IF EXISTS FILE_RESULT");
 		onCreate(db);
 	}
 }

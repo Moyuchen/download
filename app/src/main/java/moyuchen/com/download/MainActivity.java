@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         ButtonClickListener listener = new ButtonClickListener();
         downloadButton.setOnClickListener(listener);
         stopButton.setOnClickListener(listener);
-        pathText.setText("http://img3.iqilu.com/data/attachment/forum/201308/21/192654ai88zf6zaa60zddo.jpg");
+        pathText.setText("http://mirror.aarnet.edu.au/pub/TED-talks/911Mothers_2010W-480p.mp4");
     }
 
     private final class ButtonClickListener implements View.OnClickListener {
@@ -111,6 +111,11 @@ public class MainActivity extends AppCompatActivity {
                 task.exit();
         }
 
+        /**
+         * 下载方法
+         * @param path
+         * @param savDir
+         */
         private void download(String path, File savDir) {
             task = new DownloadTask(path, savDir);
             new Thread(task).start();

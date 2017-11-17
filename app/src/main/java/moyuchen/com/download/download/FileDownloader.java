@@ -41,6 +41,8 @@ public class FileDownloader {
 	/** 下载路径  */
 	private String downloadUrl;
 
+
+
 	/**
 	 * 构建文件下载器
 	 * @param downloadUrl 下载资源文件路径
@@ -53,7 +55,9 @@ public class FileDownloader {
 			this.context = context;
 			this.downloadUrl = downloadUrl;
 			fileService = new FileDBService(this.context);
+			Log.i(TAG, "FileDownloader: downloadUrl:"+this.downloadUrl);
 			URL url = new URL(this.downloadUrl);
+			Log.i(TAG, "FileDownloader: url:"+url.getPath());
 			if (!fileSaveDir.exists())
 				fileSaveDir.mkdirs();
 			this.threads = new DownloadThread[threadNum];
@@ -76,9 +80,15 @@ public class FileDownloader {
 							".NET CLR 3.0.4506.2152; .NET CLR 3.5.30729)");
 			conn.setRequestProperty("Connection", "Keep-Alive");
 			conn.connect();
+			//打印请求头信息
 			printResponseHeader(conn);
+			int responseCode = conn.getResponseCode();
+			print("============responseCode============"+responseCode);
 			if (conn.getResponseCode() == 200) {//连接成功
 				this.fileSize = conn.getContentLength();// 获取资源文件的大小
+				//打印下载文件长度
+				Log.i(TAG, "FileDownloader: fileSize:"+this.fileSize);
+
 				if (this.fileSize <= 0){
 					throw new RuntimeException("Unkown file size ");
 				}
@@ -96,6 +106,7 @@ public class FileDownloader {
 					}
 					print("已经下载的长度" + this.downloadSize);
 				}
+
 				//计算每条线程下载的数据长度
 				this.blockLength = (this.fileSize % this.threads.length) == 0 ? this.fileSize
 						/ this.threads.length : this.fileSize / this.threads.length + 1;
@@ -103,7 +114,8 @@ public class FileDownloader {
 				throw new RuntimeException("server no response ");
 			}
 		} catch (Exception e) {
-			print(e.toString());
+			e.printStackTrace();
+//			print(e.toString() );
 			throw new RuntimeException("don't connection this url");
 		}
 	}
@@ -167,6 +179,7 @@ public class FileDownloader {
 				fileService.delete(this.downloadUrl);// 下载完成删除记录
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			print(e.toString());
 			throw new Exception("file download error");
 		}
@@ -230,6 +243,7 @@ public class FileDownloader {
 			String key = entry.getKey() != null ? entry.getKey() + ":" : "";
 			print(key + entry.getValue());
 		}
+		print("=====================printResponseHeader===============End==========");
 	}
 
 
